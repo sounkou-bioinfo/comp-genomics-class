@@ -21,3 +21,27 @@ SEXP RC_len( SEXP x){
     UNPROTECT(1);
     return res;
 }
+// sample n random strings from a character vector
+SEXP RC_Random( SEXP strings, SEXP n) {
+    if(TYPEOF(strings) != STRSXP || Rf_length(strings) != 1) {
+        Rf_error("strings must be a character string vector of length 1");
+    }
+    if(TYPEOF(n) != INTSXP || Rf_length(n) != 1) {
+        Rf_error("n must be a single integer");
+    }
+    int num_samples = INTEGER(n)[0];
+    if(num_samples < 1) {
+        Rf_error("n must be a positive integer");
+    }
+    SEXP res = PROTECT(Rf_allocVector(STRSXP, num_samples));
+    R_xlen_t len = Rf_length(strings);
+    for (R_xlen_t i = 0; i < num_samples; i++) {
+        R_xlen_t idx = (R_xlen_t) (unif_rand() * len);
+        if (idx >= len) {
+            idx = len - 1; // ensure idx is within bounds
+        }
+        SET_STRING_ELT(res, i, STRING_ELT(strings, idx));
+    }
+    UNPROTECT(1);
+    return res; 
+}

@@ -2,11 +2,13 @@
 #include <Rinternals.h>
 
 extern SEXP RC_len(SEXP x);
+extern SEXP RC_Random(SEXP strings, SEXP n);
 
 // call entries for the package
 
 static const R_CallMethodDef CallEntries[] = {
     {"RC_len", (DL_FUNC) &RC_len, 1},
+    {"RC_Random", (DL_FUNC) &RC_Random, 2},
     {NULL, NULL, 0} 
 };
 
